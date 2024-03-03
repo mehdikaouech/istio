@@ -1,0 +1,24 @@
+apiVersion: networking.istio.io/v1beta1  # Version de l'API Istio utilisée
+kind: VirtualService  # Type de ressource Kubernetes : VirtualService
+metadata:
+  name: second-app  # Nom de la VirtualService
+  namespace: production  # Espace de noms dans lequel la VirtualService est déployée
+spec:
+  hosts:
+    - app.devopsbyexample.com  # Les hôtes sur lesquels cette VirtualService s'applique
+    - second-app  # Alias pour le service second-app
+  gateways:
+    - api   # Le nom du gateway à utiliser pour cette VirtualService
+  http:  # Configuration HTTP pour cette VirtualService
+    - match:  # Conditions de correspondance pour le routage
+        - uri:
+            prefix: /  # Préfixe d'URI pour lequel cette règle s'applique
+      route:  # Configuration des routes
+        - destination:  # Destination de la première route
+            host: second-app  # Nom du service de destination
+            subset: v1  # Sous-ensemble du service de destination
+          weight: 10  # Poids de la route (pour le trafic de répartition)
+        - destination:  # Destination de la deuxième route
+            host: second-app  # Nom du service de destination
+            subset: v2  # Sous-ensemble du service de destination
+          weight: 90  # Poids de la route (pour le trafic de répartition)

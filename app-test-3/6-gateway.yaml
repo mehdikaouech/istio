@@ -1,0 +1,25 @@
+---
+apiVersion: networking.istio.io/v1beta1  # Version de l'API Istio utilisée
+kind: Gateway  # Type de ressource Kubernetes : Gateway
+metadata:
+  name: api  # Nom du Gateway
+  namespace: production  # Espace de noms dans lequel le Gateway est déployé
+spec:
+  selector:
+    istio: gateway  # Sélecteur qui identifie les pods auxquels ce Gateway s'applique
+  servers:  # Configuration des serveurs pour le Gateway
+    - port:  # Configuration du premier serveur (port 80)
+        number: 80  # Numéro de port
+        name: http  # Nom du port
+        protocol: HTTP  # Protocole utilisé (HTTP)
+      hosts:  # Hôtes sur lesquels ce serveur écoute
+        - app.devopsbyexample.com  # Nom de l'hôte
+    - port:  # Configuration du deuxième serveur (port 443) / this used when we want to secure api with another rules and use https 
+        number: 443  # Numéro de port
+        name: https  # Nom du port
+        protocol: HTTPS  # Protocole utilisé (HTTPS)
+      hosts:  # Hôtes sur lesquels ce serveur écoute
+        - app.devopsbyexample.com  # Nom de l'hôte
+      tls:  # Configuration TLS pour le serveur HTTPS
+        credentialName: api-devopsbyexample-com-crt  # Nom du secret Kubernetes contenant le certificat TLS
+        mode: SIMPLE  # Mode TLS utilisé (SIMPLE)

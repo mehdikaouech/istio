@@ -1,0 +1,17 @@
+---
+apiVersion: networking.istio.io/v1beta1  # Version de l'API Istio utilisée
+kind: DestinationRule  # Type de ressource Kubernetes : DestinationRule
+metadata:
+  name: second-app  # Nom du DestinationRule
+  namespace: production  # Espace de noms dans lequel le DestinationRule est déployé
+spec:
+  host: second-app  # Nom du service de destination pour lequel les règles sont appliquées
+  subsets:  # Sous-ensembles du service de destination
+    - name: v1  # Nom du premier sous-ensemble
+      labels:  # Étiquettes qui identifient les pods appartenant à ce sous-ensemble
+        app: second-app  # Étiquette app
+        version: v1  # Étiquette version
+    - name: v2  # Nom du deuxième sous-ensemble
+      labels:  # Étiquettes qui identifient les pods appartenant à ce sous-ensemble
+        app: second-app  # Étiquette app
+        version: v2  # Étiquette version

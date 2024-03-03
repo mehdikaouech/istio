@@ -1,0 +1,16 @@
+---
+# to autom get certificate on a typial ingress you would use annotation 
+# when we create these certificates , the cert-manger will obtain a certificate from lets encrypt and stored in kubernetes secret  .
+apiVersion: cert-manager.io/v1  # Version de l'API cert-manager utilisée
+kind: Certificate  # Type de ressource Kubernetes : Certificate
+metadata:
+  name: api-devopsbyexample-com  # Nom du certificat
+  namespace: istio-ingress  # Espace de noms dans lequel le certificat est déployé / it must be created in same namespace with ingress where we have a gateway pod 
+spec:
+  secretName: api-devopsbyexample-com-crt  # Nom du secret Kubernetes dans lequel le certificat est stocké
+  dnsNames:
+    - app.devopsbyexample.com  # Noms de domaine pour lesquels le certificat est valide / to test certificat you need to update the name of stagging issuer 
+  issuerRef:
+    name: production-cluster-issuer  # Nom de l'émetteur (Issuer ou ClusterIssuer) à utiliser pour émettre ce certificat
+    kind: ClusterIssuer  # Type de référence à l'émetteur (Issuer ou ClusterIssuer)
+    group: cert-manager.io  # Groupe de ressources Kubernetes où l'émetteur est défini

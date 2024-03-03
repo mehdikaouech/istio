@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1  # Version de l'API cert-manager utilisée
+kind: ClusterIssuer  # Type de ressource Kubernetes : ClusterIssuer
+metadata:
+  name: staging-cluster-issuer  # Nom du ClusterIssuer
+spec:
+  acme:
+    # Environnement de test : doit être utilisé pour tester avant d'utiliser l'environnement de production
+    # Letsencrypt a une limite de taux stricte.
+    server: https://acme-staging-v02.api.letsencrypt.org/directory  # URL du serveur ACME pour l'environnement de test
+    privateKeySecretRef:
+      name: staging-cluster-issuer  # Nom du secret Kubernetes qui stockera la clé privée
+    solvers:
+      - selector: {}  # Sélecteur pour spécifier les cibles pour lesquelles ce solveur s'applique
+        http01:  # Méthode de validation HTTP-01 utilisée pour la vérification de domaine
+          ingress:  # Configuration de la méthode de validation HTTP-01 via Ingress
+            class: istio  # Classe de l'Ingress utilisée pour la validation HTTP-01 (dans ce cas, Istio)

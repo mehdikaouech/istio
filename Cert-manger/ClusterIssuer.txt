@@ -1,0 +1,18 @@
+Ces deux fichiers YAML définissent des objets ClusterIssuer dans Kubernetes utilisant l'API cert-manager.io. Les ClusterIssuers sont des ressources Kubernetes utilisées par Cert-Manager pour émettre des certificats TLS automatiquement à partir d'autorités de certification (CA) externes, comme Let's Encrypt.
+
+Voici une explication de chaque fichier :
+
+Fichier 1: staging-cluster-issuer.yaml
+Objectif : Ce ClusterIssuer est destiné à être utilisé dans un environnement de test.
+Server ACME : Il pointe vers l'environnement de test ACME de Let's Encrypt, qui n'impose pas de limites strictes sur le nombre de certificats que vous pouvez émettre.
+PrivateKeySecretRef : Il fait référence à un secret Kubernetes nommé "staging-cluster-issuer", où la clé privée associée au certificat sera stockée.
+Solvers HTTP-01 : Utilise la méthode de validation HTTP-01 pour vérifier la propriété du domaine. Dans ce cas, il utilise Istio comme contrôleur Ingress pour la validation HTTP-01.
+Fichier 2: production-cluster-issuer.yaml
+Objectif : Ce ClusterIssuer est destiné à être utilisé dans un environnement de production.
+Server ACME : Il pointe vers l'environnement de production ACME de Let's Encrypt.
+PrivateKeySecretRef : Il fait référence à un secret Kubernetes nommé "production-cluster-issuer", où la clé privée associée au certificat sera stockée.
+Solvers HTTP-01 : Utilise également la méthode de validation HTTP-01 pour vérifier la propriété du domaine, avec Istio comme contrôleur Ingress pour la validation.
+Utilisation :
+Ces fichiers sont utilisés pour déployer des ressources ClusterIssuer dans un cluster Kubernetes à l'aide de la commande kubectl apply -f <nom-du-fichier.yaml>.
+Une fois déployés, les ClusterIssuers peuvent être référencés dans les objets Certificate pour émettre des certificats TLS automatiquement.
+En résumé, ces fichiers définissent des configurations pour émettre des certificats TLS automatiquement dans des environnements de test et de production à l'aide de Cert-Manager et Let's Encrypt, en utilisant la validation HTTP-01 via Istio comme contrôleur Ingress.
